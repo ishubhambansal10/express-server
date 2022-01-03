@@ -31,4 +31,4 @@ const size = process.argv[2];
 
 let a=Number(size)
 
-diamond(10);
+export default diamond;

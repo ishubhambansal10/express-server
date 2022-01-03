@@ -14,4 +14,4 @@ const equilateral = (n) => {
 const size = process.argv[2];
 let a=Number(size);
 
-equilateral(10);
+export default equilateral;
