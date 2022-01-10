@@ -1,6 +1,6 @@
 import { diamond, equilateral } from './patterns';
 import { validateUsers, hasPermission } from './utils';
-import { users }  from './constants';
+import { users } from './constants';
 
 diamond(10);
 equilateral(10);

@@ -1,7 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable babel/no-unused-expressions */
-/* eslint-disable array-callback-return */
-/* eslint-disable import/no-unresolved */
 import {IEmailType} from '../interfaces';
 
 import validateEmail from './helpers';
