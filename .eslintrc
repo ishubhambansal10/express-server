@@ -1,12 +1,8 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "plugin:shopify/esnext"
-  ],
+  "extends": "airbnb-base",
+  "globals": {
+    "fetch": false
+  },
   "rules": {
     "indent": [
       "error",
@@ -20,5 +16,8 @@
     "no-eq-null": 2,
     "prefer-const": 2,
     "no-console": 0
+  },
+  "env": {
+    "jest": true
   }
 }

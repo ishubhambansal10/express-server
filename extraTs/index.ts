@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-unresolved */
-import {diamond, equilateral} from './patterns';
-import {validateUsers, hasPermission} from './utils';
-import {users} from './constants';
+import { diamond, equilateral } from './patterns';
+import { validateUsers, hasPermission } from './utils';
+import { users } from './constants';
 
 diamond(10);
 equilateral(10);
