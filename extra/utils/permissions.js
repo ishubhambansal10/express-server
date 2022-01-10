@@ -1,11 +1,4 @@
-var permissions = {
-  'getUsers': {
-  all: ['head-trainer'],
-  read : ['trainee', 'trainer'],
-  write : ['trainer'],
-  delete: [],
-  }
-  }
+import { permissions } from '../constants';
 
 const hasPermission = (moduleName, role, permissionType) => {
  let hasPermissions = false;
@@ -20,8 +13,5 @@ const hasPermission = (moduleName, role, permissionType) => {
  return hasPermissions;
 };
 
-console.log(hasPermission('getUsers', 'trainee', 'write'));
-console.log(hasPermission('getUsers', 'trainer', 'write'));
-console.log(hasPermission('getUsers', 'trainee', 'delete'));
-console.log(hasPermission('getUsers', 'trainer', 'delete'));
+export default hasPermission;
 
