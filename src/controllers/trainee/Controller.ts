@@ -1,29 +1,29 @@
 import { Request, Response, NextFunction } from "express";
 
+const trainee = [
+  {
+    name: "Vishvjeet",
+    designation: "developer",
+    location: "Pune",
+  },
+  {
+    name: "Parmeet",
+    designation: "Tester",
+    location: "Mumbai",
+  },
+  {
+    name: "Anurag",
+    designation: "frontend Developer",
+    location: "Noida",
+  },
+  {
+    name: "Tanzeem",
+    designation: "Designer",
+    location: "Chennai",
+  },
+];
 class Trainee {
   get(req: Request, res: Response, next: NextFunction) {
-    const trainee = [
-      {
-        name: "Vishvjeet",
-        designation: "developer",
-        location: "Pune",
-      },
-      {
-        name: "Parmeet",
-        designation: "Tester",
-        location: "Mumbai",
-      },
-      {
-        name: "Anurag",
-        designation: "frontend Developer",
-        location: "Noida",
-      },
-      {
-        name: "Tanzeem",
-        designation: "Designer",
-        location: "Chennai",
-      },
-    ];
     return res
       .status(200)
       .send({ message: "Fetched data Successfully", data: trainee });
@@ -39,9 +39,8 @@ class Trainee {
     return res.status(200).send({ message: "trainee added sucessfully" });
   }
   put = (req: Request, res: Response) => {
-    const trainee = this.rawTraineeData();
     const requestName = req.params.name;
-    const data = this.rawTraineeData().find((post, index) => {
+    const data = trainee.find((post, index) => {
       if (post.name === requestName) return true;
     });
     data.designation = "Associate Engineer";
@@ -49,35 +48,9 @@ class Trainee {
       .status(200)
       .send({ message: "Updated trainee successfully", data: trainee });
   };
-  rawTraineeData = () => {
-    const trainee = [
-      {
-        name: "Vishvjeet",
-        designation: "developer",
-        location: "Pune",
-      },
-      {
-        name: "Parmeet",
-        designation: "Tester",
-        location: "Mumbai",
-      },
-      {
-        name: "Anurag",
-        designation: "frontend Developer",
-        location: "Noida",
-      },
-      {
-        name: "Tanzeem",
-        designation: "Designer",
-        location: "Chennai",
-      },
-    ];
-    return trainee;
-  };
   delete = (req: Request, res: Response) => {
-    const trainee = this.rawTraineeData();
     const requestName = req.params.name;
-    const deletedData = this.rawTraineeData().filter((post, index) => {
+    const deletedData = trainee.filter((post, index) => {
       if (post.name !== requestName) return true;
     });
     return res
