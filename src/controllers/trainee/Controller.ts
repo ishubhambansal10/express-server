@@ -1,89 +1,49 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
+const trainee = [
+  {
+    name: 'Shubham',
+    designation: 'Developer',
+    dept: 'Node',
+  },
+  {
+    name: 'Jack',
+    designation: 'Developer',
+    dept: 'Node',
+  },
+];
 class Trainee {
-  get(req: Request, res: Response, next: NextFunction) {
-    const trainee = [
-      {
-        name: "Vishvjeet",
-        designation: "developer",
-        location: "Pune",
-      },
-      {
-        name: "Parmeet",
-        designation: "Tester",
-        location: "Mumbai",
-      },
-      {
-        name: "Anurag",
-        designation: "frontend Developer",
-        location: "Noida",
-      },
-      {
-        name: "Tanzeem",
-        designation: "Designer",
-        location: "Chennai",
-      },
-    ];
+  get = (req: Request, res: Response, next: NextFunction) => {
     return res
       .status(200)
-      .send({ message: "Fetched data Successfully", data: trainee });
+      .send({ message: 'Fetched data Successfully', status: 'success', data: trainee });
   }
-  post(req: Request, res: Response, next: NextFunction) {
-    console.log(req.body);
-    const { name, designation, location } = req.body;
+  post = (req: Request, res: Response, next: NextFunction) => {
+    console.log('Create request by user', req.body);
+    const { name } = req.body;
     if (!name) {
       return res
         .status(400)
-        .send({ message: "required trainee details", error: "error msg" });
+        .send({ message: 'Required trainee details', error: 'Bad request' });
     }
-    return res.status(200).send({ message: "trainee added sucessfully" });
+    return res.status(200).send({ message: 'Trainee added sucessfully', status: 'success' });
   }
   put = (req: Request, res: Response) => {
-    const trainee = this.rawTraineeData();
-    const requestName = req.params.name;
-    const data = this.rawTraineeData().find((post, index) => {
-      if (post.name === requestName) return true;
-    });
-    data.designation = "Associate Engineer";
-    return res
-      .status(200)
-      .send({ message: "Updated trainee successfully", data: trainee });
-  };
-  rawTraineeData = () => {
-    const trainee = [
-      {
-        name: "Vishvjeet",
-        designation: "developer",
-        location: "Pune",
-      },
-      {
-        name: "Parmeet",
-        designation: "Tester",
-        location: "Mumbai",
-      },
-      {
-        name: "Anurag",
-        designation: "frontend Developer",
-        location: "Noida",
-      },
-      {
-        name: "Tanzeem",
-        designation: "Designer",
-        location: "Chennai",
-      },
-    ];
-    return trainee;
+    console.log('Update request by user', req.body);
+    const { name, designation, dept } = req.body;
+    const newTrainee = trainee.find((item) => item.name === name);
+    if (!newTrainee) {
+      const updateTrainee = [...trainee, { name, designation, dept }];
+      return res.status(201).send({ message: 'Trainee Updated successfully', data: updateTrainee });
+    }
+    return res.status(200).send({ message: 'Already exist', data: trainee });
   };
   delete = (req: Request, res: Response) => {
-    const trainee = this.rawTraineeData();
-    const requestName = req.params.name;
-    const deletedData = this.rawTraineeData().filter((post, index) => {
-      if (post.name !== requestName) return true;
-    });
-    return res
-      .status(200)
-      .send({ message: "deleted trainee successfully", data: deletedData });
-  };
+    console.log('Delete request by user', req.body);
+    const { name } = req.body;
+    const newTrainee = trainee.filter((data) => data.name !== name);
+    return res.status(201).send({ message: 'Users deleted successfully', data: newTrainee });
+  }
 }
 
 export default new Trainee();
