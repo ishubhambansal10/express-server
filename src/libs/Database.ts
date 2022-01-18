@@ -1,0 +1,22 @@
+import * as mongoose from 'mongoose';
+
+export default class Database {
+  public static async open(mongoURL: string) {
+    const options = {
+      autoIndex: false, //auto indexing false
+      minPoolSize: 10, //maintains 10 connections socket
+    };
+    try {
+      await mongoose.connect(mongoURL, options);
+      console.log('Connected to MongoDB Successfully!');
+    } catch (e) {
+      throw new Error(`MongoDb connection Failed: ${mongoURL}`);
+    }
+    // mongoose.connection.on('error', () => {
+    //   throw new Error(`MongoDb connection Failed: ${mongoURL}`);
+    // });
+  }
+  public static close() {
+    mongoose.disconnect();
+  }
+}
