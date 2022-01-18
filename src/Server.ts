@@ -12,7 +12,6 @@ export default class Server {
      * This method use to set health-check route
      */
     setupRoutes() {
-      console.log(this);
       this.app.get('/health-check', (req, res) => {
           res.send("'I am OK");
       });

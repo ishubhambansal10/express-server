@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
-
+// import * as mongoose from 'mongoose';
+const mongoose = require('mongoose');
 export default class Database {
   public static async open(mongoURL: string) {
     const options = {
@@ -9,12 +9,10 @@ export default class Database {
     try {
       await mongoose.connect(mongoURL, options);
       console.log('Connected to MongoDB Successfully!');
+      return true;
     } catch (e) {
       throw new Error(`MongoDb connection Failed: ${mongoURL}`);
     }
-    // mongoose.connection.on('error', () => {
-    //   throw new Error(`MongoDb connection Failed: ${mongoURL}`);
-    // });
   }
   public static close() {
     mongoose.disconnect();
