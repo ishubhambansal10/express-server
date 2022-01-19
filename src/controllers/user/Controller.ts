@@ -15,7 +15,7 @@ const users = [
     dept: 'Node',
   },
 ];
-class Trainee {
+class User {
   get = (req: Request, res: Response, next: NextFunction) => {
     return res
       .status(200)
@@ -57,4 +57,4 @@ class Trainee {
     return res.status(200).send({message: 'Token created successfully', data: { token }, status: 'success'});
   };
 }
-export default new Trainee();
+export default new User();
