@@ -3,21 +3,21 @@ import { userModel } from './UserModel';
 import IUserModel from './IUserModel';
 
 export default class UserRepository {
-  public static createObejectId() {
+  public static createObjectId() {
     return new mongoose.Types.ObjectId();
   }
-  public findOne(query): mongoose.Query<IUserModel, IUserModel> {
+  public findOne(query): any {
     return userModel.findOne(query).lean();
   }
-  public find(query, projection?: any, options?: any): mongoose.Query<IUserModel[], IUserModel> {
+  public find(query, projection?: any, options?: any): any {
     return userModel.find(query, projection, options);
   }
-  public count(): mongoose.Query<number, IUserModel> {
+  public count(): any {
     return userModel.count();
   }
-  public create(data: any): Promise<IUserModel> {
+  public create(data: any): any {
     console.log('UserRepository::create create', data);
-    const id = UserRepository.createObejectId();
+    const id = UserRepository.createObjectId();
     const model = new userModel({
         _id: id,
         ...data,
