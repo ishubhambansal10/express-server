@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import routes from './libs/routes';
+import Database from './libs/Database';
 import router from './routes';
 export default class Server {
     app: express.Express;
@@ -41,11 +42,17 @@ export default class Server {
     /**
      * This method use to listen port
      */
-    run() {
-        const {port, env} = this.config;
-        this.app.listen(port, () => {
-          const message = `|| App running on ${port} of ${env} successfully ||`
-          console.log(message);
-        });
+    public async run() {
+        const {port, env, mongoURL} = this.config;
+        try {
+          await Database.open(mongoURL);
+          this.app.listen(port, () => {
+            const message = `|| App running on ${port} of ${env} successfully ||`
+            console.log(message);
+          });
+        } catch (e) {
+          console.log('Error', e);
+        }
+        return this;
     }
 }
