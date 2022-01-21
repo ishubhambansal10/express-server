@@ -30,7 +30,7 @@ export default (module, permissionType) => async (req, res, next) => {
   if (!userData) {
     next({error: 'Authentication failed', message: 'User not found', status: 403});
   }
-  if (!hasPermission(module, user.role, permissionType)) {
+  if (!hasPermission(module, userData.role, permissionType)) {
         next({ error: 'Unauthorized', message: 'Permission Denied', status: 403});
   }
   req.user = user;

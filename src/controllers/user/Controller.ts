@@ -17,14 +17,10 @@ const users = [
   },
 ];
 class User {
-  get = async (request: Request, response: Response): Promise < Response > => {
+  get = async (req: Request, response: Response): Promise < Response > => {
         const userRepository: UserRepository = new UserRepository();
         try {
-            const { id , emailId } = request.body;
-            const query = {
-                // _id: id,
-                email: emailId
-            };
+            const query = req.body || {}
             const result = await userRepository.find(query);
                 return response
                 .status(200)
@@ -66,8 +62,7 @@ class User {
     return res.status(201).send({ message: 'Users deleted successfully', data: deletedTrainee });
   };
   createToken = (req: Request, res: Response) => {
-    const { name } = req.body;
-    const token = jwt.sign(name, config.secret);
+    const token = jwt.sign(req.body, config.secret);
     return res.status(200).send({message: 'Token created successfully', data: { token }, status: 'success'});
   };
 }
