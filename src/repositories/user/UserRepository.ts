@@ -1,35 +1,31 @@
 import * as mongoose from 'mongoose';
 import { userModel } from './UserModel';
 import IUserModel from './IUserModel';
+import VersionableRepository from '../versionable/versionableRepository';
 
-export default class UserRepository {
-  public static createObjectId() {
-    return new mongoose.Types.ObjectId();
+export default class UserRepository extends VersionableRepository <IUserModel, mongoose.Model<IUserModel>> {
+  constructor() {
+    super (userModel);
   }
-  public findOne(query): any {
-    return userModel.findOne(query).lean();
+  public async findOne(query): Promise<IUserModel> {
+    return await super.findOne(query);
   }
-  public find(query, projection?: any, options?: any): any {
-    return userModel.find(query, projection, options);
+  public async find(query, projection?: any, options?: any): Promise<IUserModel[]> {
+    return await super.findAll(query, projection, options);
   }
   public count(): any {
-    return userModel.count();
+    return super.count();
   }
   public create(data: any): any {
     console.log('UserRepository::create create', data);
-    const id = UserRepository.createObjectId();
-    const model = new userModel({
-        _id: id,
-        ...data,
-    });
-    return model.save();
+    return super.create(data);
   }
-  public update(data: any): mongoose.UpdateQuery<IUserModel> {
+  public async updateData(data: any): Promise<IUserModel> {
     const { _id , ...userData} = data;
-    return userModel.updateOne({_id} , { ...userData});
+    return await super.update({_id} , { ...userData});
   }
   public delete(data: any) {
-    const result = userModel.deleteOne(data);
+    const result = super.softDelete(data);
     return result;
   }
 }
