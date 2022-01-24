@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import config from '../../config/configuration';
 import UserRepository from '../../repositories/user/UserRepository';
+import * as bcrypt from 'bcrypt';
 
 const userRepository: UserRepository = new UserRepository();
 const users = [
@@ -53,12 +54,31 @@ class User {
   delete = async (req: Request, res: Response) => {
     console.log('Delete request by user', req.body);
     const { originalId } = req.body;
-    const data = await userRepository.delete({originalId});
+    const data = await userRepository.delete(originalId);
     return res.status(200).json({ message: 'Trainee deleted successfully', data: data, status: 'success' });
   };
-  createToken = (req: Request, res: Response) => {
-    const token = jwt.sign(req.body, config.secret);
-    return res.status(200).send({message: 'Token created successfully', data: { token }, status: 'success'});
+  passMatch = async (data: any) => {
+    const userFound = await userRepository.findOne(data.email);
+    const match = await bcrypt.compare( data.password, userFound.password)
+    if (match) {
+      console.log('Hash Pass Matched');
+      return userFound;
+    } else {
+      console.log('Incorrect Password');
+      throw new Error ('Password not matched')
+    }
+  };
+  createToken = async (req: Request, res: Response) => {
+    try {
+      const userFound = await this.passMatch(req.body);
+      if (userFound) {
+      const data = {originalId: userFound.originalId, email: userFound.email};
+      const token = jwt.sign(data, config.secret, { expiresIn: 60 * 15 });
+      return res.status(200).send({message: 'Token created successfully', data: { token }, status: 'success'});
+    }
+    } catch (e) {
+      res.status(403).send({message: 'Token generation failed', status: 'Failure'});
+    }
   };
 }
 export default new User();

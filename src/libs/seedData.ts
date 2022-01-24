@@ -1,4 +1,7 @@
 import UserRepository from '../repositories/user/UserRepository';
+import config from '../config/configuration';
+import * as bcrypt from 'bcrypt';
+import { BCRYPT_SALT_ROUNDS } from '../../extraTs/constants';
 
 const userRepository: UserRepository = new UserRepository();
 export default () => {
@@ -7,13 +10,15 @@ export default () => {
         console.log('res', res);
 
         if (res === 0) {
+            const salt = bcrypt.genSaltSync(BCRYPT_SALT_ROUNDS);
+            const hash = bcrypt.hashSync(config.password, salt);
             console.log('Data seeding in progrss...');
             userRepository.create(
                 {
                     name: 'Head Trainer',
                     role: 'head-trainer',
                     email: 'head.trainer@successive.tech',
-                    password: 'Trainer@123'
+                    password: hash,
                 }
             );
             userRepository.create(
@@ -21,7 +26,7 @@ export default () => {
                     name: 'Shubham Bansal',
                     role: 'trainee',
                     email: 'shubham@successive.tech',
-                    password: 'shubham123'
+                    password: hash,
                 }
             );
             console.log('Data seeded successfully');

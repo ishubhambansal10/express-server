@@ -37,7 +37,7 @@ export default class VersionableRepository<D extends mongoose.Document, M extend
         return await this.model.count(finalquery);
     }
 
-    softDelete({ originalId }) {
+    softDelete(originalId: string) {
       return this.model.updateOne({originalId , deletedAt: undefined}, {deletedAt: Date.now()});
     }
 
@@ -47,7 +47,7 @@ export default class VersionableRepository<D extends mongoose.Document, M extend
 
          if (prevData) {
              const { originalId } = prevData;
-             await this.softDelete( { originalId } );
+             await this.softDelete(originalId);
          } else {
              return undefined;
          }
