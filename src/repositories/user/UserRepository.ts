@@ -3,7 +3,7 @@ import { userModel } from './UserModel';
 import IUserModel from './IUserModel';
 import VersionableRepository from '../versionable/versionableRepository';
 
-export default class UserRepository extends VersionableRepository <IUserModel, mongoose.Model<IUserModel>> {
+export default class UserRepository extends VersionableRepository <any , mongoose.Model<IUserModel>> {
   constructor() {
     super (userModel);
   }
@@ -13,19 +13,16 @@ export default class UserRepository extends VersionableRepository <IUserModel, m
   public async find(query, projection?: any, options?: any): Promise<IUserModel[]> {
     return await super.findAll(query, projection, options);
   }
-  public count(): any {
-    return super.count();
+  public async count(): Promise<number> {
+    return await super.count();
   }
-  public create(data: any): any {
-    console.log('UserRepository::create create', data);
-    return super.create(data);
+  public async create(data: any): Promise<IUserModel> {
+    return await super.create(data);
   }
-  public async updateData(data: any): Promise<IUserModel> {
-    const { _id , ...userData} = data;
-    return await super.update({_id} , { ...userData});
+  public updateData(filterQuery: any, data): mongoose.UpdateQuery<IUserModel> {
+    return super.update(filterQuery, data);
   }
-  public delete(data: any) {
-    const result = super.softDelete(data);
-    return result;
+  public delete(data: any): mongoose.Query<object, IUserModel> {
+    return super.softDelete(data);
   }
 }

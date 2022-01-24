@@ -28,7 +28,7 @@ class User {
           return res.status(400).json({ status: 'Bad Request', message: error });
         }
   };
-  post = async (req: Request, res: Response, next: NextFunction) => {
+  create = async (req: Request, res: Response, next: NextFunction) => {
     console.log('Create request by user', req.body);
     const { name, email, password } = req.body;
     if (!name && !email && !password) {
@@ -40,25 +40,21 @@ class User {
     await userRepository.create(data);
     return res.status(200).send({ message: 'Trainee added sucessfully', status: 'success' });
   }
-  put = (req: Request, res: Response, next: NextFunction) => {
+  update = async (req: Request, res: Response, next: NextFunction) => {
     console.log('Update request by user', req.body);
-    const { name, email, role } = req.body;
-    const newTrainee = users.find((item) => item.name === name);
-    if (!newTrainee) {
-      return res.status(400).send({ error: 'Bad Request', message: 'No Trainee Found', status: '400' });
+    try {
+      const{ originalId , ...rest} = req.body;
+      const data = await userRepository.updateData({ originalId }, rest);
+      res.status(200).json({ data: data, message: 'Trainee Updated Successfully', count: data.length, status:'success' });
+    } catch (err) {
+      next({ message: err.message, status: 'error' });
     }
-    const updatedTrainee = [...users, { name, email, role }];
-    return res.status(201).send({ message: 'Trainee Updated Successfully', data: updatedTrainee });
   };
-  delete = (req: Request, res: Response) => {
+  delete = async (req: Request, res: Response) => {
     console.log('Delete request by user', req.body);
-    const { name } = req.body;
-    const user = users.find((item) => item.name === name);
-    if (!user) {
-      return res.status(400).send({ error: 'Bad Request', message: 'No Trainee Found', status: '400' });
-    }
-    const deletedTrainee = users.filter((data) => data.name !== name);
-    return res.status(201).send({ message: 'Users deleted successfully', data: deletedTrainee });
+    const { originalId } = req.body;
+    const data = await userRepository.delete({originalId});
+    return res.status(200).json({ message: 'Trainee deleted successfully', data: data, status: 'success' });
   };
   createToken = (req: Request, res: Response) => {
     const token = jwt.sign(req.body, config.secret);
