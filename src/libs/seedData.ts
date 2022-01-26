@@ -21,14 +21,6 @@ export default () => {
                     password: hash,
                 }
             );
-            userRepository.create(
-                {
-                    name: 'Shubham Bansal',
-                    role: 'trainee',
-                    email: 'shubham@successive.tech',
-                    password: hash,
-                }
-            );
             console.log('Data seeded successfully');
         }
     }).catch(err => console.log(err));

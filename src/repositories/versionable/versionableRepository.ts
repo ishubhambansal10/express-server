@@ -13,7 +13,6 @@ export default class VersionableRepository<D extends mongoose.Document, M extend
 
     public async create(data: any): Promise<D> {
         const id = VersionableRepository.createObjectId();
-        console.log(id);
         const model = new this.model({
             _id: id,
             originalId: id,

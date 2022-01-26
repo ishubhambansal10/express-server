@@ -7,7 +7,7 @@ import authMiddleWare from '../../libs/routes/authMiddleWare';
 
 const router = Router();
 
-router.get('/', authMiddleWare(Users, 'read'), validationHandler(validation.get), UserRoutes.get);
+router.get('/', authMiddleWare(Users, 'read'), validationHandler(validation.get), UserRoutes.getAll);
 router.post('/createToken', UserRoutes.createToken);
 router.post('/', authMiddleWare(Users, 'write'), validationHandler(validation.create), UserRoutes.create);
 router.put('/', authMiddleWare(Users, 'write'), validationHandler(validation.update), UserRoutes.update);

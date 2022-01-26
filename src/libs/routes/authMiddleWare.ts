@@ -21,11 +21,10 @@ export default (module, permissionType) => async (req, res, next) => {
   try {
     user = jwt.verify(token, secret);
   } catch (err) {
-    console.log(err);
     next({ error: 'Authentication failed', message: 'User not Authorized', status: 403 });
   }
-  const userData = await userRepository.findOne({_id: user.id});
-  console.log(userData);
+
+  const userData = await userRepository.findOne({_id: user.originalId});
 
   if (!userData) {
     next({error: 'Authentication failed', message: 'User not found', status: 403});
