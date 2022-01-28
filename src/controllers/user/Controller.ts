@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import config from '../../config/configuration';
+import UserRepository from '../../repositories/user/UserRepository';
 
 const users = [
   {
@@ -16,11 +17,20 @@ const users = [
   },
 ];
 class User {
-  get = (req: Request, res: Response, next: NextFunction) => {
-    return res
-      .status(200)
-      .send({ message: 'Fetched data Successfully', status: 'success', data: users });
-  }
+  get = async (req: Request, response: Response): Promise < Response > => {
+        const userRepository: UserRepository = new UserRepository();
+        try {
+            const query = req.body || {}
+            const result = await userRepository.find(query);
+                return response
+                .status(200)
+                .send({ message: 'Fetched data successfully', data: result });
+        } catch (error) {
+            return response
+            .status(400)
+            .json({ status: 'Bad Request', message: error });
+        }
+  };
   post = (req: Request, res: Response, next: NextFunction) => {
     console.log('Create request by user', req.body);
     const { name } = req.body;
@@ -52,8 +62,7 @@ class User {
     return res.status(201).send({ message: 'Users deleted successfully', data: deletedTrainee });
   };
   createToken = (req: Request, res: Response) => {
-    const { name } = req.body;
-    const token = jwt.sign(name, config.secret);
+    const token = jwt.sign(req.body, config.secret);
     return res.status(200).send({message: 'Token created successfully', data: { token }, status: 'success'});
   };
 }
