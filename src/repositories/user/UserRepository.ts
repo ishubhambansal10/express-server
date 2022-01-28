@@ -11,8 +11,13 @@ export default class UserRepository extends VersionableRepository <any , mongoos
     return await super.findOne(query);
   }
   public async findAll(query, projection?: any, options?: any): Promise<IUserModel[]> {
-    const {limit, skip} = query;
-    return await super.findAll(query, projection, { sort: {createdAt: '-1'}, skip: +(skip), limit: +(limit)});
+    const {limit, skip, search=''} = query;
+    const searchElement = {
+      $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+  ]};
+    return await super.findAll(searchElement, projection, { sort: {createdAt: '-1'}, skip: +(skip), limit: +(limit)});
   }
   public async count(): Promise<number> {
     return await super.count();

@@ -13,7 +13,7 @@ const permissions: IUserType = {
     all: [headTrainer],
     read : [headTrainer, trainee, trainer],
     write : [trainer, headTrainer],
-    delete: [trainer],
+    delete: [trainer, headTrainer],
   },
   [Trainees]: {
     all: [headTrainer],
