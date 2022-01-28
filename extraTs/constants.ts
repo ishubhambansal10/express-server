@@ -31,3 +31,4 @@ const users : IEmailType[] = [
 ];
 
 export {permissions, users, Trainees, Users};
+export const BCRYPT_SALT_ROUNDS: number = 6;

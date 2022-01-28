@@ -16,13 +16,13 @@ export default class UserRepository extends VersionableRepository <any , mongoos
   public async count(): Promise<number> {
     return await super.count();
   }
-  public async create(data: any): Promise<IUserModel> {
+  public async create(data: {}): Promise<IUserModel> {
     return await super.create(data);
   }
-  public updateData(filterQuery: any, data): mongoose.UpdateQuery<IUserModel> {
+  public updateData(filterQuery: any, data: {}): mongoose.UpdateQuery<IUserModel> {
     return super.update(filterQuery, data);
   }
-  public delete(data: any): mongoose.Query<object, IUserModel> {
+  public delete(data: string): mongoose.Query<object, IUserModel> {
     return super.softDelete(data);
   }
 }
