@@ -1,6 +1,5 @@
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) {
-      console.log('In here');
       return next(err);
   }
   const {message, error, status} = err;

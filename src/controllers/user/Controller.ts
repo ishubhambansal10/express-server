@@ -3,44 +3,34 @@ import * as jwt from 'jsonwebtoken';
 import config from '../../config/configuration';
 import UserRepository from '../../repositories/user/UserRepository';
 import * as bcrypt from 'bcrypt';
+import { BCRYPT_SALT_ROUNDS } from '../../../extraTs/constants';
 
 const userRepository: UserRepository = new UserRepository();
-const users = [
-  {
-    name: 'Shubham',
-    role: 'head-trainer',
-    designation: 'Developer',
-    dept: 'Node',
-  },
-  {
-    name: 'Jack',
-    designation: 'Developer',
-    dept: 'Node',
-  },
-];
+
 class User {
-  get = async (req: Request, res: Response): Promise < Response > => {
+  getAll = async (req: Request, res: Response, next: NextFunction): Promise < Response > => {
     console.log('Get request by user', req.body);
         try {
-          const query = req.body || {}
-          const result = await userRepository.find(query);
-          return res.status(200).send({ message: 'Fetched data successfully', data: result });
-        } catch (error) {
-          return res.status(400).json({ status: 'Bad Request', message: error });
+          const {limit=0, skip=0} = req.query;
+          const result = await userRepository.findAll({ limit, skip });
+          const count = await userRepository.count();
+          return res.status(200).send({ message: 'Fetched data successfully', data: result, count });
+        } catch (err) {
+          next({ message: err.message, status: 'error' });
         }
   };
   create = async (req: Request, res: Response, next: NextFunction) => {
     console.log('Create request by user', req.body);
-    const { name, email, password } = req.body;
-    if (!name && !email && !password) {
-      return res
-        .status(400)
-        .send({ message: 'Required trainee details', error: 'Bad request', status: '400' });
+    try {
+      const obj = req.body;
+      const salt = bcrypt.genSaltSync(BCRYPT_SALT_ROUNDS);
+      const hash = bcrypt.hashSync(config.password, salt);
+      const response = await userRepository.create({ ...obj, password: hash});
+      return res.status(200).send({ message: 'Trainee added sucessfully', status: 'success' });
+    } catch(e) {
+      next({ message: e.message, status: 'error' });
     }
-    const data = req.body
-    await userRepository.create(data);
-    return res.status(200).send({ message: 'Trainee added sucessfully', status: 'success' });
-  }
+  };
   update = async (req: Request, res: Response, next: NextFunction) => {
     console.log('Update request by user', req.body);
     try {

@@ -11,8 +11,8 @@ const Trainees: string = 'trainees';
 const permissions: IUserType = {
   [Users]: {
     all: [headTrainer],
-    read : [trainee, trainer],
-    write : [trainer],
+    read : [headTrainer, trainee, trainer],
+    write : [trainer, headTrainer],
     delete: [trainer],
   },
   [Trainees]: {
